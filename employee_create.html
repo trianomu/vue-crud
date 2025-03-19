@@ -108,9 +108,23 @@
                     return page === "employee" ? this.currentPath.includes("employee") : this.currentPath === page;
                 },
                 addRecord() {
-                    let records = JSON.parse(localStorage.getItem('records')) || [];
+                    let existingRecords = JSON.parse(localStorage.getItem('records')) || []; // Retrieve existing records
+
+                    // Ensure we retain generated employees if no records exist in localStorage
+                    if (existingRecords.length === 0) {
+                        existingRecords = Array.from({ length: 30 }, (_, i) => ({ 
+                            id: i + 1, 
+                            name: `Employee ${i + 1}`, 
+                            department: i % 2 === 0 ? 'Finance / Accounting' : 'Human Resources',
+                            status: i % 3 === 0 ? 'Active' : 'Inactive',
+                            email: `employee${i + 1}@example.com`, 
+                            role: i % 2 === 0 ? 'Manager' : 'Staff',
+                            avatar: Math.random() < 0.5 ? './assets/ava_man.png' : './assets/ava_woman.png'
+                        }));
+                    }
+
                     let newRecord = {
-                        id: records.length + 1,
+                        id: existingRecords.length + 1,
                         name: this.employee.name,
                         email: this.employee.email,
                         department: this.employee.department,
@@ -118,8 +132,9 @@
                         status: this.employee.status,
                         avatar: Math.random() < 0.5 ? './assets/ava_man.png' : './assets/ava_woman.png'
                     };
-                    records.push(newRecord);
-                    localStorage.setItem('records', JSON.stringify(records));
+
+                    existingRecords.push(newRecord); // Add new record to the array
+                    localStorage.setItem('records', JSON.stringify(existingRecords)); // Save updated records
                     this.showSuccessModal = true;
                 },
                 closeSuccessModal() {
