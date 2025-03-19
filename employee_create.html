@@ -115,7 +115,8 @@
                         email: this.employee.email,
                         department: this.employee.department,
                         role: this.employee.role,
-                        status: this.employee.status
+                        status: this.employee.status,
+                        avatar: Math.random() < 0.5 ? './assets/ava_man.png' : './assets/ava_woman.png'
                     };
                     records.push(newRecord);
                     localStorage.setItem('records', JSON.stringify(records));
