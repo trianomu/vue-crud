@@ -106,11 +106,14 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    currentPath: window.location.pathname.split("/").pop()
+                    currentPath: window.location.pathname.split("/").pop() || "index.html"
                 };
             },
             methods: {
                 isActive(page) {
+                    if (page === "index.html" && (this.currentPath === "" || this.currentPath === "index.html")) {
+                        return true;
+                    }
                     if (page === "employee") {
                         return this.currentPath.includes("employee");
                     }
