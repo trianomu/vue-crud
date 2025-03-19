@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Employee</title>
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <img src="./assets/logo-hashmicro-white.webp" alt="" class="logo">
+        </div>
+        <div class="nav-right">
+            <a href="#" data-tooltip="Logout" onclick="logout()"><i class="fas fa-sign-out"></i></a>
+        </div>
+    </nav>
+    
+    <div class="container" id="app">
+        <aside class="sidebar">
+            <ul>
+                <li>
+                    <a href="index.html" :class="{'active': isActive('index.html')}">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="employee.html" :class="{'active': isActive('employee')}">
+                        <i class="fa-solid fa-users"></i> Employees
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main>
+            <div class="card">
+                <h2>Add New Employee</h2>
+                <form @submit.prevent="addRecord">
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="name">Name<span class="required">*</span></label>
+                            <input type="text" id="name" v-model="employee.name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email<span class="required">*</span></label>
+                            <input type="email" id="email" v-model="employee.email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Department<span class="required">*</span></label>
+                            <select id="department" v-model="employee.department" required>
+                                <option value="HR">HR</option>
+                                <option value="IT">IT</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role<span class="required">*</span></label>
+                            <input type="text" id="role" v-model="employee.role" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status<span class="required">*</span></label>
+                            <select id="status" v-model="employee.status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="button" class="button back-button" onclick="window.location.href='employee.html'">Back</button>
+                        <button type="submit" class="button">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div id="success-modal" class="modal" v-if="showSuccessModal">
+                <div class="modal-content">
+                    <p>Employee created successfully!</p>
+                    <button id="confirm-ok" @click="closeSuccessModal">OK</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        if (localStorage.getItem("isAuthenticated") !== "true") {
+            window.location.href = "login.html";
+        }
+        function logout() {
+            localStorage.removeItem("isAuthenticated"); 
+            window.location.href = "login.html"; 
+        }
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currentPath: window.location.pathname.split("/").pop(),
+                    employee: {
+                        name: '',
+                        email: '',
+                        department: '',
+                        role: '',
+                        status: 'Active',
+                    },
+                    showSuccessModal: false
+                };
+            },
+            methods: {
+                isActive(page) {                    
+                    return page === "employee" ? this.currentPath.includes("employee") : this.currentPath === page;
+                },
+                addRecord() {
+                    let records = JSON.parse(localStorage.getItem('records')) || [];
+                    let newRecord = {
+                        id: records.length + 1,
+                        name: this.employee.name,
+                        email: this.employee.email,
+                        department: this.employee.department,
+                        role: this.employee.role,
+                        status: this.employee.status
+                    };
+                    records.push(newRecord);
+                    localStorage.setItem('records', JSON.stringify(records));
+                    this.showSuccessModal = true;
+                },
+                closeSuccessModal() {
+                    this.showSuccessModal = false;
+                    window.location.href = 'employee.html';
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>

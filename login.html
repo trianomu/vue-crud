@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HashMicro CRUD</title>
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app" class="login-container">
+        <!-- Left Side (Promo Section) -->
+        <div class="promo-section">
+            <div class="promo-content">
+                <h1>Welcome Back</h1>
+                <p>Log in for a more practical and efficient management experience!</p>
+            </div>
+        </div>
+
+        <!-- Right Side (Login Form) -->
+        <div class="login-section">
+            <h2>Login</h2>
+            <p>Please input your username and password</p>
+
+            <form @submit.prevent="login">
+                <div class="input-group">
+                    <label for="user">Username</label>
+                    <div class="user-container">
+                        <input type="user" id="user" v-model="user" placeholder="Input username" required>
+
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input 
+                            :type="showPassword ? 'text' : 'password'" 
+                            id="password" 
+                            v-model="password" 
+                            placeholder="Input password" 
+                            required
+                        >
+                        <i :class="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" @click="togglePassword"></i>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    user: "",
+                    password: "",
+                    showPassword: false,
+                    errorMessage: "",
+                };
+            },
+            methods: {
+                togglePassword() {
+                    this.showPassword = !this.showPassword;
+                },
+                login() {
+                    if (this.user === "admin" && this.password === "admin") {
+                        localStorage.setItem("isAuthenticated", "true");
+                        window.location.href = "index.html";
+                    } else {
+                        this.errorMessage = "User atau password salah!";
+                    }
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>

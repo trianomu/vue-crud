@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashMicro CRUD</title>
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <img src="./assets/logo-hashmicro-white.webp" alt="" class="logo">
+        </div>
+        <div class="nav-right">
+            <a href="#" data-tooltip="Logout" onclick="logout()"><i class="fas fa-sign-out"></i></a>
+        </div>
+    </nav>
+
+    <div class="container" id="app" >
+        <aside class="sidebar">
+            <ul>
+                <li>
+                    <a href="index.html" :class="{'active': isActive('index.html')}">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="employee.html" :class="{'active': isActive('employee')}">
+                        <i class="fa-solid fa-users"></i> Employees
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main>        
+            <h2>Employee List</h2>
+            <div class="header">
+                <a href="employee_create.html" class="button create"><i class="fa-solid fa-plus"></i> Add Employee</a>
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" v-model="searchQuery" placeholder="Search employee..." class="search-bar">
+                </div>                
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- <th>Number</th> -->
+                            <th>Name</th>
+                            <th>Email</th> 
+                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="paginatedRecords.length === 0">
+                            <td colspan="6" class="no-records">No records found</td>
+                        </tr>
+                        <tr v-else v-for="(item, index) in paginatedRecords" :key="index">
+                            <td>
+                                <img :src="item.avatar" alt="Avatar" class="avatar">
+                                {{ item.name }}
+                            </td>
+                            <td>{{ item.email }}</td> 
+                            <td>{{ item.department }}</td>
+                            <td>{{ item.role }}</td> 
+                            <td :class="{'status-active': item.status === 'Active', 'status-inactive': item.status === 'Inactive'}">
+                                {{ item.status }}
+                            </td>
+                            <td>
+                                <a href="employee_edit.html" class="edit" @click.prevent="editRecord(item)">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a href="#" class="delete" @click.prevent="openDeleteModal(item)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" v-if="totalPages > 1">
+                    <button @click="goToPage(1)" :disabled="currentPage === 1">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </button>
+                    <button @click="prevPage" :disabled="currentPage === 1">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                
+                    <button v-for="page in visiblePages" 
+                            :key="page" 
+                            @click="goToPage(page)" 
+                            :class="{ 'active': currentPage === page}">
+                        {{ page }}
+                    </button>
+                
+                    <button @click="nextPage" :disabled="currentPage === totalPages">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </button>
+                
+                </div>
+                
+            </div>
+        </main>
+        <div id="custom-alert" class="modal" v-if="showDeleteModal">
+            <div class="modal-content">
+                <p>Are you sure you want to delete {{ selectedEmployee.name }}?</p>
+                <button id="cancel-delete" @click="cancelDelete">Cancel</button>
+                <button id="confirm-delete" @click="confirmDelete">Yes</button>
+            </div>
+        </div>
+        <div id="success-modal" class="modal" v-if="showSuccessModal">
+            <div class="modal-content">
+                <p>Employee deleted successfully!</p>
+                <button id="confirm-ok" @click="closeSuccessModal">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        if (localStorage.getItem("isAuthenticated") !== "true") {
+            window.location.href = "login.html";
+        }
+        function logout() {
+            localStorage.removeItem("isAuthenticated"); 
+            window.location.href = "login.html"; 
+        }
+        const app = Vue.createApp({
+            data() {
+                return {
+                    records: JSON.parse(localStorage.getItem('records')) || Array.from({ length: 30 }, (_, i) => ({ 
+                        id: i + 1, 
+                        name: `Employee ${i + 1}`, 
+                        department: i % 2 === 0 ? 'Finance / Accounting' : 'Human Resources',
+                        status: i % 3 === 0 ? 'Active' : 'Inactive',
+                        email: `employee${i + 1}@example.com`, 
+                        role: i % 2 === 0 ? 'Manager' : 'Staff',
+                        avatar: Math.random() < 0.5 ? './assets/ava_man.png' : './assets/ava_woman.png'
+                    })),
+                    searchQuery: "",
+                    currentPage: 1,
+                    recordsPerPage: 10,
+                    showDeleteModal: false,
+                    showSuccessModal: false,
+                    selectedEmployee: {},
+                    currentPath: window.location.pathname.split("/").pop()
+                };
+            },
+            computed: {
+                filteredRecords() {
+                    return this.records.filter(employee => 
+                        employee.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        employee.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        employee.department.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        employee.role.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        employee.status.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    );
+                },
+                totalPages() {
+                    return Math.ceil(this.filteredRecords.length / this.recordsPerPage);
+                },
+                paginatedRecords() {
+                    const start = (this.currentPage - 1) * this.recordsPerPage;
+                    return this.filteredRecords.slice(start, start + this.recordsPerPage);
+                },
+                visiblePages() {
+                    let range = [];
+                    let start = Math.max(1, this.currentPage - 2);
+                    let end = Math.min(this.totalPages, start + 4);
+
+                    for (let i = start; i <= end; i++) {
+                        range.push(i);
+                    }
+
+                    return range;
+                }
+            },
+            methods: {
+                isActive(page) {                    
+                    if (page === "employee") {
+                        return this.currentPath.includes("employee");
+                    }
+                    return this.currentPath === page;
+                },
+                editRecord(item) {
+                    localStorage.setItem('editEmployee', JSON.stringify(item));
+                    window.location.href = 'employee_edit.html';
+                },
+                openDeleteModal(employee) {
+                    this.selectedEmployee = employee;
+                    this.showDeleteModal = true;
+                },
+                cancelDelete() {
+                    this.showDeleteModal = false;
+                },
+                confirmDelete() {
+                    if (this.selectedEmployee && this.selectedEmployee.id) {
+                        this.records = this.records.filter(record => record.id !== this.selectedEmployee.id);
+                        localStorage.setItem('records', JSON.stringify(this.records));
+                        this.showDeleteModal = false;
+                        this.selectedEmployee = {};
+                        this.showSuccessModal = true;
+                    }
+                },
+                closeSuccessModal() {
+                    this.showSuccessModal = false;
+                    // window.location.href = 'employee.html';
+                },
+                goToPage(page) {
+                    if (page >= 1 && page <= this.totalPages) {
+                        this.currentPage = page;
+                    }
+                },
+                prevPage() {
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                    }
+                },
+                nextPage() {
+                    if (this.currentPage < this.totalPages) {
+                        this.currentPage++;
+                    }
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
