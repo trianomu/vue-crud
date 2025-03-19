@@ -35,7 +35,10 @@
             </ul>
         </aside>
         <main>        
-            <h2>Employee List</h2>
+            <h2>
+                <span class="red">
+                    <i class="fa-solid fa-user-tie"></i>
+                </span> Employee List</h2>
             <div class="header">
                 <a href="employee_create.html" class="button create"><i class="fa-solid fa-plus"></i> Add Employee</a>
                 <div class="search-container">
@@ -48,7 +51,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <!-- <th>Number</th> -->
                             <th>Name</th>
                             <th>Email</th> 
                             <th>Department</th>
@@ -83,27 +85,38 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="pagination" v-if="totalPages > 1">
-                    <button @click="goToPage(1)" :disabled="currentPage === 1">
-                        <i class="fa-solid fa-angles-left"></i>
-                    </button>
-                    <button @click="prevPage" :disabled="currentPage === 1">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
                 
-                    <button v-for="page in visiblePages" 
-                            :key="page" 
-                            @click="goToPage(page)" 
-                            :class="{ 'active': currentPage === page}">
-                        {{ page }}
-                    </button>
-                
-                    <button @click="nextPage" :disabled="currentPage === totalPages">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                    <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">
-                        <i class="fa-solid fa-angles-right"></i>
-                    </button>
+                <div class="pagination" >
+                    <div class="pagination-controls">                    
+                        <select id="recordsPerPage" v-model="recordsPerPage" @change="resetPage">
+                            <option v-for="option in pageOptions" :key="option" :value="option">
+                                {{ option }} records 
+                            </option>
+                        </select>
+                        <span>/ page</span>
+                    </div>
+                    <div v-if="totalPages > 1">
+                        <button @click="goToPage(1)" :disabled="currentPage === 1">
+                            <i class="fa-solid fa-angles-left"></i>
+                        </button>
+                        <button @click="prevPage" :disabled="currentPage === 1">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                    
+                        <button v-for="page in visiblePages" 
+                                :key="page" 
+                                @click="goToPage(page)" 
+                                :class="{ 'active': currentPage === page}">
+                            {{ page }}
+                        </button>
+                    
+                        <button @click="nextPage" :disabled="currentPage === totalPages">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">
+                            <i class="fa-solid fa-angles-right"></i>
+                        </button>
+                    </div>
                 
                 </div>
                 
@@ -146,7 +159,8 @@
                     })),
                     searchQuery: "",
                     currentPage: 1,
-                    recordsPerPage: 10,
+                    recordsPerPage: 10, 
+                    pageOptions: [5, 10, 15, 20],
                     showDeleteModal: false,
                     showSuccessModal: false,
                     selectedEmployee: {},
@@ -227,6 +241,9 @@
                     if (this.currentPage < this.totalPages) {
                         this.currentPage++;
                     }
+                },
+                resetPage() {
+                    this.currentPage = 1; // Reset to first page when changing records per page
                 }
             }
         }).mount("#app");

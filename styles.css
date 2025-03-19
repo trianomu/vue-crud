@@ -1,4 +1,4 @@
-/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -55,16 +55,16 @@ body {
     z-index: -1;
 }
 .promo-content {
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .promo-section h1 {
-    font-size: 28px;
+    font-size: 36px;
     margin-bottom: 10px;
 }
 
 .promo-section p {
-    font-size: 16px;
+    font-size: 20px;
     margin-bottom: 20px;
 }
 
@@ -88,6 +88,7 @@ body {
 h2 {
     margin-bottom: 10px;
     color: #FFA111;
+    font-size: 36px;
 }
 
 .input-group {
@@ -235,7 +236,7 @@ main h2,
 main p {
     margin-left: 20px;
     margin-right: 20px;
-    color: #FEA110;
+    /* color: #FEA110; */
     position: relative;
     padding-bottom: 0px;
 }
@@ -268,7 +269,7 @@ main h2::after {
     left: 34px;
     top: 50%;
     transform: translateY(-50%);
-    color: #888;
+    color: #FEA110;
     font-size: 16px;
 }
 
@@ -477,9 +478,32 @@ td a {
 }
 
 /* Pagination */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px;
+    font-size: 14px;
+    color: #000;    
+}
+
+.pagination-controls select {
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-controls select:hover {
+    border-color: #FEA110;
+}
+
 .pagination {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-top: 10px;
     width: 100%;
@@ -558,12 +582,21 @@ button.active {
 
 /* Index Styling */
 .title {
-    color: #FFA111;
-    font-size: 28px;
+    color: #C82333;
+    font-size: 40px;
     font-weight: bold;
     text-align: left;
     margin-left: 40px;
+    font-family:'Roboto';
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
 }
+.title img {
+    width: 64px;
+    margin-right: 5px;
+}
+
 .description, .features {    
     padding: 20px;
     background: #fff;
@@ -595,7 +628,7 @@ button.active {
 }
 .feature-item i {
     font-size: 40px;
-    color: #FEA110;
+    color: #C82333;
     margin-bottom: 10px;
 }
 .feature-item h3 {
@@ -618,7 +651,7 @@ button.active {
 }
 
 .card h2 {
-    text-align: center;
+    text-align: left;
     color: #FEA110;
     margin-bottom: 20px;
 }
@@ -628,6 +661,10 @@ button.active {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
+form{
+    margin: 0px 20px;
+}
+
 
 .form-group {
     display: flex;
@@ -668,6 +705,9 @@ button.active {
     font-weight: bold;
 }
 
+.red{
+    color: #C82333;
+}
 .button-container {
     display: flex;
     justify-content: flex-end; /* Aligns the button to the right */
@@ -729,6 +769,7 @@ button.active {
 }
 
 .modal-content {
+    color: black;
     background: white;
     padding: 20px;
     border-radius: 8px;
