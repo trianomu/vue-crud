@@ -1,134 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>HashMicro CRUD</title>
-			<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
-			<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-			<link rel="stylesheet" href="styles.css">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>HashMicro CRUD</title>
+		<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<link rel="stylesheet" href="styles.css">
 	</head>
-
 	<body>
-			<nav>
-					<div class="nav-left">
-							<img src="./assets/logo-hashmicro-white.webp" alt="" class="logo">
-					</div>
-					<div class="nav-right">
-							<a href="#" data-tooltip="Logout" onclick="logout()"><i class="fas fa-sign-out"></i></a>
-					</div>
-			</nav>
-
-			<div class="container" id="app">
-					<aside class="sidebar">
-							<ul>
-									<li>
-											<a href="index.html" :class="{'active': isActive('index.html')}">
-													<i class="fa-solid fa-house"></i> Home
-											</a>
-									</li>
-									<li>
-											<a href="employee.html" :class="{'active': isActive('employee')}">
-													<i class="fa-solid fa-users"></i> Employees
-											</a>
-									</li>
-							</ul>
-					</aside>
-
-					<main>
-							<!-- Judul Utama -->
-
-							<h1 class="title">
-									<span>
-											<img src="./assets//hashmicro-square-logo.webp" alt="">
-									</span>
-									HashMicro HR Management
-							</h1>
-
-							<!-- Penjelasan HR Management -->
-							<section class="description">
-									<h2><span class="red"><i class="fa-solid fa-lightbulb"></i></span> What is HR Management?</h2>
-									<p>
-											Human Resource Management (HRM) is a strategic approach to managing an organization's workforce
-											effectively.
-											It encompasses a wide range of functions, including recruitment, employee onboarding, training,
-											performance management,
-											and ensuring workplace well-being. HRM plays a crucial role in shaping company culture, fostering
-											employee engagement,
-											and aligning workforce strategies with business goals. By implementing effective HR policies,
-											organizations can enhance
-											productivity, reduce turnover, and create a positive work environment where employees can grow and
-											thrive. Additionally,
-											HRM ensures compliance with labor laws and industry regulations, helping businesses maintain ethical
-											and legal standards
-											while optimizing workforce efficiency.
-									</p>
-							</section>
-
-							<!-- Fitur CRUD -->
-							<section class="features">
-									<h2>
-											<span class="red">
-													<i class="fa-solid fa-toolbox"></i>
-											</span> Features
-									</h2>
-									<div class="feature-list">
-											<div class="feature-item">
-													<i class="fa-solid fa-plus-circle"></i>
-													<h3>Create</h3>
-													<p>Easily register new employees by entering their personal and professional details.
-															Ensure accurate record-keeping while streamlining the onboarding process.</p>
-											</div>
-											<div class="feature-item">
-													<i class="fa-solid fa-list"></i>
-													<h3>Read</h3>
-													<p>Access and view employee information in an organized table format.
-															Quickly search, filter, and retrieve essential details for better workforce management.</p>
-											</div>
-											<div class="feature-item">
-													<i class="fa-solid fa-pen-to-square"></i>
-													<h3>Update</h3>
-													<p>Modify employee records effortlessly to reflect changes in job roles,
-															contact details, or employment status, ensuring up-to-date and accurate information.</p>
-											</div>
-											<div class="feature-item">
-													<i class="fa-solid fa-trash"></i>
-													<h3>Delete</h3>
-													<p>Securely remove employee records when they are no longer needed, maintaining
-															a clean and organized database while ensuring data integrity.</p>
-											</div>
-									</div>
-							</section>
-					</main>
+		<nav>
+			<div class="nav-left">
+				<img src="./assets/logo-hashmicro-white.webp" alt="" class="logo">
 			</div>
+			<div class="nav-right">
+				<a href="#" data-tooltip="Logout" onclick="logout()"><i class="fas fa-sign-out"></i></a>
+			</div>
+		</nav>
 
-			<script>
-					if (localStorage.getItem("isAuthenticated") !== "true") {
-							window.location.href = "login.html";
+		<div class="container" id="app">
+			<aside class="sidebar">
+				<ul>
+					<li>
+						<a href="index.html" :class="{'active': isActive('index.html')}">
+							<i class="fa-solid fa-house"></i> Home
+						</a>
+					</li>
+					<li>
+						<a href="employee.html" :class="{'active': isActive('employee')}">
+							<i class="fa-solid fa-users"></i> Employees
+						</a>
+					</li>
+				</ul>
+			</aside>
+
+			<main>
+				<h1 class="title">
+					<span>
+						<img src="./assets//hashmicro-square-logo.webp" alt="">
+					</span>
+					HashMicro HR Management
+				</h1>
+				<section class="description">
+					<h2>
+						<span class="red">
+							<i class="fa-solid fa-lightbulb"></i>
+						</span> 
+						What is HR Management?
+					</h2>
+					<p>
+						Human Resource Management (HRM) is a strategic approach to managing an organization's workforce
+						effectively.
+						It encompasses a wide range of functions, including recruitment, employee onboarding, training,
+						performance management,
+						and ensuring workplace well-being. HRM plays a crucial role in shaping company culture, fostering
+						employee engagement,
+						and aligning workforce strategies with business goals. By implementing effective HR policies,
+						organizations can enhance
+						productivity, reduce turnover, and create a positive work environment where employees can grow and
+						thrive. Additionally,
+						HRM ensures compliance with labor laws and industry regulations, helping businesses maintain ethical
+						and legal standards
+						while optimizing workforce efficiency.
+					</p>
+				</section>
+				<section class="features">
+					<h2>
+						<span class="red">
+							<i class="fa-solid fa-toolbox"></i>
+						</span> Features
+					</h2>
+					<div class="feature-list">
+						<div class="feature-item">
+							<i class="fa-solid fa-plus-circle"></i>
+							<h3>Create</h3>
+							<p>Easily register new employees by entering their personal and professional details.
+								Ensure accurate record-keeping while streamlining the onboarding process.</p>
+						</div>
+						<div class="feature-item">
+							<i class="fa-solid fa-list"></i>
+							<h3>Read</h3>
+							<p>Access and view employee information in an organized table format.
+								Quickly search, filter, and retrieve essential details for better workforce management.</p>
+						</div>
+						<div class="feature-item">
+							<i class="fa-solid fa-pen-to-square"></i>
+							<h3>Update</h3>
+							<p>Modify employee records effortlessly to reflect changes in job roles,
+								contact details, or employment status, ensuring up-to-date and accurate information.</p>
+						</div>
+						<div class="feature-item">
+							<i class="fa-solid fa-trash"></i>
+							<h3>Delete</h3>
+							<p>Securely remove employee records when they are no longer needed, maintaining
+								a clean and organized database while ensuring data integrity.</p>
+						</div>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<script>
+			if (localStorage.getItem("isAuthenticated") !== "true") {
+				window.location.href = "login.html";
+			}
+			function logout() {
+				localStorage.removeItem("isAuthenticated");
+				window.location.href = "login.html";
+			}
+			const app = Vue.createApp({
+				data() {
+					return {
+						currentPath: window.location.pathname.split("/").pop() || "index.html"
+					};
+				},
+				methods: {
+					isActive(page) {
+						if (page === "index.html" && (this.currentPath === "" || this.currentPath === "index.html")) {
+							return true;
+						}
+						if (page === "employee") {
+							return this.currentPath.includes("employee");
+						}
+						return this.currentPath === page;
 					}
-					function logout() {
-							localStorage.removeItem("isAuthenticated");
-							window.location.href = "login.html";
-					}
-					const app = Vue.createApp({
-							data() {
-									return {
-											currentPath: window.location.pathname.split("/").pop() || "index.html"
-									};
-							},
-							methods: {
-									isActive(page) {
-											if (page === "index.html" && (this.currentPath === "" || this.currentPath === "index.html")) {
-													return true;
-											}
-											if (page === "employee") {
-													return this.currentPath.includes("employee");
-											}
-											return this.currentPath === page;
-									}
-							}
-					}).mount("#app");
-			</script>
+				}
+			}).mount("#app");
+		</script>
 	</body>
 </html>
